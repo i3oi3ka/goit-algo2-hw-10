@@ -2,9 +2,6 @@
 class Teacher:
     pass
 
-    def create_schedule(subjects, teachers):
-        pass
-
 
 def create_schedule(subjects, teachers):
     pass
