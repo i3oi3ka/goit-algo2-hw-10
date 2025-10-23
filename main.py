@@ -27,7 +27,35 @@ if __name__ == "__main__":
     # Множина предметів
     subjects = {"Math", "Physics", "Chemistry", "Biology", "Informatics"}
     # Створення списку викладачів
-    teachers = []
+    teachers = [
+        Teacher(
+            "Oleksandr", "Ivanenko", 45, "o.ivanenko@example.com", {"Math", "Physics"}
+        ),
+        Teacher(
+            "Maria", "Petrenko", 38, "m.petrenko@example.com", {"Informatics", "Math"}
+        ),
+        Teacher(
+            "Sergiy",
+            "Kovalenko",
+            50,
+            "s.kovalenko@example.com",
+            {"Chemistry", "Biology"},
+        ),
+        Teacher(
+            "Dmytro",
+            "Bondarenko",
+            35,
+            "d.bondarenko@example.com",
+            {"Physics", "Informatics"},
+        ),
+        Teacher(
+            "Olena",
+            "Grycenko",
+            42,
+            "o.grycenko@example.com",
+            {"Biology"},
+        ),
+    ]
 
     # Виклик функції створення розкладу
     schedule = create_schedule(subjects, teachers)
