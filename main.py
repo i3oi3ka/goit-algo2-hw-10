@@ -67,6 +67,6 @@ if __name__ == "__main__":
             print(
                 f"{teacher.first_name} {teacher.last_name}, {teacher.age} років, email: {teacher.email}"
             )
-            print(f"   Викладає предмети: {', '.join(teacher.assigned_subjects)}\\n")
+            print(f"   Викладає предмети: {', '.join(teacher.assigned_subjects)}\n")
     else:
         print("Неможливо покрити всі предмети наявними викладачами.")
