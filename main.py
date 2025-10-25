@@ -11,16 +11,39 @@ class Teacher:
 
 
 def create_schedule(subjects, teachers):
-    for subject in subjects:
-        for teacher in teachers:
-            if (
-                subject in teacher.can_teach_subjects
-                and subject not in teacher.assigned_subjects
-            ):
-                teacher.assigned_subjects.append(subject)
-                break
+    uncovered = set(subjects)
+    for t in teachers:
+        t.assigned_subjects = []
 
-    return teachers
+    selected = []
+
+    while uncovered:
+        best = None
+        best_new = set()
+
+        for t in teachers:
+            new_subjects = t.can_teach_subjects & uncovered
+            if not new_subjects:
+                continue
+            # Вибір за кількістю нових предметів, при рівності — наймолодший
+            if (
+                best is None
+                or len(new_subjects) > len(best_new)
+                or (len(new_subjects) == len(best_new) and t.age < best.age)
+            ):
+                best = t
+                best_new = new_subjects
+
+        if best is None:
+            # Не вдається покрити залишок предметів
+            return None
+
+        # Призначаємо знайдені предмети цьому викладачу
+        best.assigned_subjects = list(best_new)
+        selected.append(best)
+        uncovered -= best_new
+
+    return selected
 
 
 if __name__ == "__main__":
