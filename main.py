@@ -1,4 +1,3 @@
-# Визначення класу Teacher
 class Teacher:
 
     def __init__(self, first_name, last_name, age, email, can_teach_subjects):
@@ -9,9 +8,13 @@ class Teacher:
         self.can_teach_subjects = can_teach_subjects
         self.assigned_subjects = []
 
+    def __repr__(self):
+        return f"Teacher({self.first_name} {self.last_name}, {self.age})"
+
 
 def create_schedule(subjects, teachers):
     uncovered = set(subjects)
+    # Скидаємо попередні призначення
     for t in teachers:
         t.assigned_subjects = []
 
@@ -22,9 +25,12 @@ def create_schedule(subjects, teachers):
         best_new = set()
 
         for t in teachers:
+            # Знаходимо предмети, які викладач може вести І які ще не покриті
             new_subjects = t.can_teach_subjects & uncovered
+
             if not new_subjects:
                 continue
+
             # Вибір за кількістю нових предметів, при рівності — наймолодший
             if (
                 best is None
@@ -36,60 +42,62 @@ def create_schedule(subjects, teachers):
 
         if best is None:
             # Не вдається покрити залишок предметів
-            return None
+            # Повертаємо None і непокриті предмети для діагностики
+            return None, uncovered
 
         # Призначаємо знайдені предмети цьому викладачу
         best.assigned_subjects = list(best_new)
         selected.append(best)
         uncovered -= best_new
 
-    return selected
+    return selected, uncovered
 
 
 if __name__ == "__main__":
-    # Множина предметів
-    subjects = {"Math", "Physics", "Chemistry", "Biology", "Informatics"}
-    # Створення списку викладачів
+    # Множина предметів (відповідно до умови)
+    subjects = {"Математика", "Фізика", "Хімія", "Інформатика", "Біологія"}
+
+    # Створення списку викладачів (відповідно до умови)
     teachers = [
         Teacher(
-            "Oleksandr", "Ivanenko", 45, "o.ivanenko@example.com", {"Math", "Physics"}
+            "Олександр",
+            "Іваненко",
+            45,
+            "o.ivanenko@example.com",
+            {"Математика", "Фізика"},
         ),
+        Teacher("Марія", "Петренко", 38, "m.petrenko@example.com", {"Хімія"}),
         Teacher(
-            "Maria", "Petrenko", 38, "m.petrenko@example.com", {"Informatics", "Math"}
-        ),
-        Teacher(
-            "Sergiy",
-            "Kovalenko",
+            "Сергій",
+            "Коваленко",
             50,
             "s.kovalenko@example.com",
-            {"Chemistry", "Biology"},
+            {"Інформатика", "Математика"},
         ),
         Teacher(
-            "Dmytro",
-            "Bondarenko",
+            "Наталія", "Шевченко", 29, "n.shevchenko@example.com", {"Біологія", "Хімія"}
+        ),
+        Teacher(
+            "Дмитро",
+            "Бондаренко",
             35,
             "d.bondarenko@example.com",
-            {"Physics", "Informatics"},
+            {"Фізика", "Інформатика"},
         ),
-        Teacher(
-            "Olena",
-            "Grycenko",
-            42,
-            "o.grycenko@example.com",
-            {"Biology"},
-        ),
+        Teacher("Олена", "Гриценко", 42, "o.grytsenko@example.com", {"Біологія"}),
     ]
 
     # Виклик функції створення розкладу
-    schedule = create_schedule(subjects, teachers)
+    schedule, uncovered = create_schedule(subjects, teachers)
 
     # Виведення розкладу
     if schedule:
-        print("Розклад занять:")
+        print("Розклад успішно складено:\n")
         for teacher in schedule:
             print(
                 f"{teacher.first_name} {teacher.last_name}, {teacher.age} років, email: {teacher.email}"
             )
-            print(f"   Викладає предмети: {', '.join(teacher.assigned_subjects)}\n")
+            print(f"  Викладає предмети: {', '.join(teacher.assigned_subjects)}\n")
     else:
         print("Неможливо покрити всі предмети наявними викладачами.")
+        print(f"Залишились непокритими: {', '.join(uncovered)}")
